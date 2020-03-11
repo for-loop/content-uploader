@@ -9,7 +9,7 @@ def postgres_url():
     '''
     Return url to access the Postgres db
     '''
-    return 'postgresql://{}:{}@{}:{}/{}'.format(os.environ['POSTGRES_USER'], os.environ['POSTGRES_PASSWORD'], os.environ['POSTGRES_HOST_PUBLIC'], os.environ['POSTGRES_PORT'], os.environ['POSTGRES_DATABASE'])
+    return 'postgresql://{}:{}@{}:{}/{}'.format(os.environ['POSTGRES_USER'], os.environ['POSTGRES_PASSWORD'], os.environ['POSTGRES_HOST'], os.environ['POSTGRES_PORT'], os.environ['POSTGRES_DATABASE'])
 
 
 def etl(from_table, from_column, to_table, to_partition_key, region):

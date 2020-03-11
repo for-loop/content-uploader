@@ -42,7 +42,7 @@ I coded in **Python**.
 ```bash
 export POSTGRES_USER=xxxx
 export POSTGRES_PASSWORD=xxxx
-export POSTGRES_HOST_PUBLIC=x.x.x.x
+export POSTGRES_HOST=x.x.x.x
 export POSTGRES_PORT=xxxx
 export POSTGRES_DATABASE=xxx
 ```
