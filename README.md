@@ -39,13 +39,13 @@ I coded in **Python**.
 
 * Authentication for PostgreSQL. Create the following environmental variables in `.bashrc`:
 
-```bash
-export POSTGRES_USER=xxxx
-export POSTGRES_PASSWORD=xxxx
-export POSTGRES_HOST=x.x.x.x
-export POSTGRES_PORT=xxxx
-export POSTGRES_DATABASE=xxx
-```
+	```bash
+	export POSTGRES_USER=xxxx
+	export POSTGRES_PASSWORD=xxxx
+	export POSTGRES_HOST=x.x.x.x
+	export POSTGRES_PORT=xxxx
+	export POSTGRES_DATABASE=xxx
+	```
 
 * [boto3](https://github.com/boto/boto3)
 * [psycopg2](https://pypi.org/project/psycopg2/)
@@ -56,4 +56,8 @@ export POSTGRES_DATABASE=xxx
 
 1. Move the data from Postgres to DynamoDB.
 
-`python etl_postgres2dynamodb.py <postgres table name> <postgres column name> <dynamodb table name> <dynamodb partition key> [--region <region name>]`
+	```
+	python etl_postgres2dynamodb.py <postgres table name> <postgres column name> \
+					<dynamodb table name> <dynamodb partition key> \
+					[--region <region name>]
+	```
