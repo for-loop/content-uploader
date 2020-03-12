@@ -1,4 +1,6 @@
-This lambda function requires the folloiwng environment variables:
+This lambda function requires the following environment variables:
 
-`DYNAMODB_TABLE`:`xxxx`
-`DYNAMODB_KEY`:`xxxx`
+```
+DYNAMODB_TABLE:xxxx
+DYNAMODB_KEY:xxxx
+```
