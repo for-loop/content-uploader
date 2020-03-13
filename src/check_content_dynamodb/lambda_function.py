@@ -15,6 +15,6 @@ def lambda_handler(event, context):
     )
     
     return {
-        'exists': bool(response['Count'])
+        'exists': response['Count']
     }
 
