@@ -2,7 +2,8 @@
 1. [Problem](README.md#problem)
 2. [Approach](README.md#approach)
 3. [Tech Stack](README.md#tech-stack)
-3. [Dependencies](README.md#dependencies)
+4. [Dependencies](README.md#dependencies)
+5. [Run](README.md#run)
 
 # Problem
 
@@ -25,17 +26,35 @@ Some of the challenges to consider include the following:
 2. Compare the value of the checksum against existing values in the database.
 3. If no match is found, then upload the file to S3 bucket.
 
+> In this prototype, the above approach has been simplified:
+>
+> 1. The user submits a checksum via the frontend (hosted on S3).
+> 2. This invokes API gateway and the lambda function will check the value in DynamoDB.
+> 3. The user will get a response of whether or not the content exists.
+>
+> More feature may be added in the future.
+
+### Preprocessing
+
 The database containing millions of checksum values have already been made using a [batch ETL process](https://github.com/for-loop/duplicate-detector).
 
 The data, however, is stored in PostgreSQL, a relational database. I wonder how the latency compares to NoSQL.
 
 So as a preprocessing step, the data was moved from Postgres to DynamoDB.
 
-I coded in **Python**.
-
 # Tech Stack
 
+### Preprocessing
+
+* RDS > DynamoDB
+
+### Prototype (serverless)
+
+* S3 (web hosting) > API Gateway > Lambda > DynamoDB
+
 # Dependencies
+
+### Preprocessing
 
 * Authentication for PostgreSQL. Create the following environmental variables in `.bashrc`:
 
@@ -50,9 +69,22 @@ I coded in **Python**.
 * [boto3](https://github.com/boto/boto3)
 * [psycopg2](https://pypi.org/project/psycopg2/)
 
+### Backend
+
+* Environment variables for Lambda function.
+
+	```
+	DYNAMODB_TABLE:xxxx
+	DYNAMODB_KEY:xxxx
+	```
+
+### Frontend
+
+* URL for the API Gateway. Edit `src/frontend/config.js`
+
 # Run
 
-## Preprocessing
+### Preprocessing
 
 1. Move the data from Postgres to DynamoDB.
 
