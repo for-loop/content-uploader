@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="author" content="Hiro Watari">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Check if content exists</title>
+</head>
+<body>
+
+	<div id="msg">Check if content exists</div>
+
+	<button>Submit checksum</button>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="config.js"></script>
+	<script>
+		$(document).ready(function(){
+		  $("button").click(function(){
+		  	
+		  	const EXPECTED_LENGTH = 32;
+		  	let content = prompt('Please enter the checksum.');
+			
+ 			if(content.length < EXPECTED_LENGTH || content.length > EXPECTED_LENGTH) {
+ 				$("#msg").html('Error: The entry is invalid. Try again.');
+ 			} else {
+				if(API_GATEWAY_URL === null) {
+					$("#msg").html('Error: API cannot be reached.');
+				} else {
+					$("#msg").html('Wait...');
+				
+					$.ajax({
+						url: API_GATEWAY_URL, 
+						type: "POST", 
+						data: JSON.stringify({"content": content}), 
+						crossDomain: true, 
+						contentType: "application/json", 
+						dataType: "json", 
+						success: function(result){
+							if(result.exists) {
+								$("#msg").html('Content exists!');
+							} else {
+								$("#msg").html('This is a new content!');
+							}
+						}, 
+						error: function(error){
+							$("#msg").html("Something did not work. Please try again.")
+						}, 
+						timeout: 4000
+					});
+				}
+			}
+		  });
+		});
+	</script>
+</body>
+</html>

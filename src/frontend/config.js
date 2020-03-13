@@ -1,0 +1,1 @@
+const API_GATEWAY_URL = null;
