@@ -10,47 +10,79 @@
 
 	<div id="msg">Check if content exists</div>
 
-	<button>Submit checksum</button>
+	<form method="POST" enctype="multipart/form-data" onsubmit="return false;" >
+		<input id=file type=file placeholder="Select a file" />
+	</form>
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdn.rawgit.com/satazor/SparkMD5/master/spark-md5.min.js"></script>
 	<script src="config.js"></script>
 	<script>
 		$(document).ready(function(){
-		  $("button").click(function(){
-		  	
-		  	const EXPECTED_LENGTH = 32;
-		  	let content = prompt('Please enter the checksum.');
-			
- 			if(content.length < EXPECTED_LENGTH || content.length > EXPECTED_LENGTH) {
- 				$("#msg").html('Error: The entry is invalid. Try again.');
- 			} else {
-				if(API_GATEWAY_URL === null) {
-					$("#msg").html('Error: API cannot be reached.');
-				} else {
-					$("#msg").html('Wait...');
-				
-					$.ajax({
-						url: API_GATEWAY_URL, 
-						type: "POST", 
-						data: JSON.stringify({"content": content}), 
-						crossDomain: true, 
-						contentType: "application/json", 
-						dataType: "json", 
-						success: function(result){
-							if(result.exists) {
-								$("#msg").html('Content exists!');
-							} else {
-								$("#msg").html('This is a new content!');
-							}
-						}, 
-						error: function(error){
-							$("#msg").html("Something did not work. Please try again.")
-						}, 
-						timeout: 4000
-					});
+			// Adapted from https://github.com/satazor/js-spark-md5
+			document.getElementById('file').addEventListener('change', function () {
+				var blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice,
+					file = this.files[0],
+					chunkSize = 2097152,
+					chunks = Math.ceil(file.size / chunkSize),
+					currentChunk = 0,
+					spark = new SparkMD5.ArrayBuffer(),
+					fileReader = new FileReader();
+
+				fileReader.onload = function (e) {
+					$("#msg").html("read chunk number "+parseInt(currentChunk+1)+" of "+chunks);
+					spark.append(e.target.result);
+					currentChunk++;
+
+					if (currentChunk < chunks) {
+						loadNext();
+					} else {
+						let content = spark.end();
+						
+						checkContent(content);	
+					}
+				};
+
+				fileReader.onerror = function () {
+					$("#msg").html('oops, something went wrong.');;
+				};
+
+				function loadNext() {
+					var start = currentChunk * chunkSize,
+						end = ((start + chunkSize) >= file.size) ? file.size : start + chunkSize;
+
+					fileReader.readAsArrayBuffer(blobSlice.call(file, start, end));
 				}
-			}
-		  });
+				loadNext();
+				
+				function checkContent(content) {
+					if(API_GATEWAY_URL === null) {
+						$("#msg").html('Error: API cannot be reached.');
+					} else {
+						$("#msg").html('Wait...');
+			
+						$.ajax({
+							url: API_GATEWAY_URL, 
+							type: "POST", 
+							data: JSON.stringify({"content": content}), 
+							crossDomain: true, 
+							contentType: "application/json", 
+							dataType: "json", 
+							success: function(result){
+								if(result.exists) {
+									$("#msg").html('Content exists!');
+								} else {
+									$("#msg").html('This is a new content!');
+								}
+							}, 
+							error: function(error){
+								$("#msg").html("Something did not work. Please try again.")
+							}, 
+							timeout: 4000
+						});
+					}
+				}
+			});
 		});
 	</script>
 </body>

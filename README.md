@@ -28,7 +28,7 @@ Some of the challenges to consider include the following:
 
 > In this prototype, the above approach has been simplified:
 >
-> 1. The user submits a checksum via the frontend (hosted on S3).
+> 1. The user submits a file. Calculate checksum (using [SparkMD5](https://github.com/satazor/js-spark-md5)).
 > 2. This invokes API gateway and the lambda function will check the value in DynamoDB.
 > 3. The user will get a response of whether or not the content exists.
 >
