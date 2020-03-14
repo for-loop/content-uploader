@@ -44,13 +44,7 @@ So as a preprocessing step, the data was moved from Postgres to DynamoDB.
 
 # Tech Stack
 
-### Preprocessing
-
-* RDS > DynamoDB
-
-### Prototype (serverless)
-
-* S3 (web hosting) > API Gateway > Lambda > DynamoDB
+<img src='images/tech-stack.jpg' />
 
 # Dependencies
 
